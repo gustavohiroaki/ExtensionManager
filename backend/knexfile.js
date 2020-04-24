@@ -13,11 +13,12 @@ module.exports = {
     },
 
     staging: {
-        client: 'postgresql',
+        client: 'mysql',
         connection: {
-            database: 'my_db',
-            user: 'username',
-            password: 'password',
+            database: 'imafuk29_ExtensionManager',
+            user: 'imafuk29_extmgmt',
+            password: 'Ext8080@',
+            host: '162.241.2.65',
         },
         pool: {
             min: 2,
@@ -25,6 +26,7 @@ module.exports = {
         },
         migrations: {
             tableName: 'knex_migrations',
+            directory: './src/app/database/migrations',
         },
     },
 
