@@ -10,7 +10,26 @@ export default {
                 'position',
                 'description',
                 `sectors.name as sector`,
+                `sectors.color as color`,
             ])
+            .innerJoin('sectors', 'extensions.sector', 'sectors.id');
+
+        return res.json(data);
+    },
+
+    async find(req, res) {
+        const data = await db('extensions')
+            .where(`extensions.extension`, req.params.id)
+            .select([
+                'extension',
+                `extensions.name`,
+                'position',
+                'description',
+                `sectors.name as sector`,
+                `sectors.color as color`,
+                `sectors.id as sector_id`,
+            ])
+            .first()
             .innerJoin('sectors', 'extensions.sector', 'sectors.id');
 
         return res.json(data);
@@ -32,6 +51,16 @@ export default {
             });
 
         const { extension, name, sector, position, description } = req.body;
+
+        const extensionExists = await db('extensions')
+            .where('extension', extension)
+            .select('*')
+            .first();
+
+        if (extensionExists)
+            return res
+                .status(400)
+                .json({ error: 'This extension is already registered' });
 
         const data = await db('extensions').insert({
             extension,
@@ -103,32 +132,16 @@ export default {
         if (!extensionExists)
             return res.status(400).json({ error: 'Extension does not exists' });
 
-        if (extension) {
-            const newExtensionExists = await db('extensions')
-                .where('extension', extension)
-                .select('*')
-                .first();
-
-            if (newExtensionExists)
-                return res.status(400).json({
-                    error:
-                        'You cannot update to this extension because it is already in use',
-                });
-        }
-
         if (sector) {
             const sectorExists = await db('sectors')
-                .where('name', sector)
+                .where('id', sector)
                 .select('*')
                 .first();
 
-            if (sectorExists) {
-                sector = sectorExists.id;
-            } else {
-                return res.status(400).json({
-                    error:
-                        'This sector does not exists, you must to type identical as the real sector name',
-                });
+            if (!sectorExists) {
+                return res
+                    .status(400)
+                    .json({ error: 'The sector selected does not exists' });
             }
         }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 
 import logo from '../../assets/images/logo.png';
@@ -20,7 +20,7 @@ export default function NewExtension({ navigation }) {
       </Header>
       <AppContainer>
         <FormContainer>
-          <Entypo name="new-message" color="#000" size={60} />
+          {/* <Entypo name="new-message" color="#000" size={60} /> */}
         </FormContainer>
       </AppContainer>
     </Container>

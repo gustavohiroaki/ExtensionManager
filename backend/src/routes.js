@@ -6,6 +6,7 @@ import SectorController from './app/controllers/SectorController';
 const router = Router();
 
 router.get('/extension', ExtensionController.index);
+router.get('/extension/:id', ExtensionController.find);
 router.post('/extension', ExtensionController.create);
 router.delete('/extension/:extensionParam', ExtensionController.delete);
 router.put('/extension/:extensionParam', ExtensionController.update);

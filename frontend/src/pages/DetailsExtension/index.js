@@ -64,7 +64,7 @@ export default function DetailsExtension(props) {
   useEffect(() => {
     loadSectors();
     loadExtension();
-  });
+  }, []);
 
   return (
     <>
