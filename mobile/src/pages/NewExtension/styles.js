@@ -20,7 +20,7 @@ export const Logo = styled.Image``;
 export const AppContainer = styled.View`
   justify-content: center;
   align-items: center;
-  height: 80%;
+  height: 600px;
 `;
 
 export const FormContainer = styled.View`
@@ -33,4 +33,6 @@ export const FormContainer = styled.View`
   padding: 10px 20px 50px 20px;
 
   align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
 `;
