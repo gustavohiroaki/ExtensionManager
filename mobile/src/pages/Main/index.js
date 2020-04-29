@@ -45,6 +45,14 @@ export default function Main({ navigation }) {
     loadExtensions();
   }, [search]);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadExtensions();
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <Container>
       <Header>
@@ -71,7 +79,16 @@ export default function Main({ navigation }) {
         <ExtensionContainer
           data={extensions}
           keyExtractor={(item) => item.extension.toString()}
-          renderItem={({ item }) => <Card CardData={item} />}
+          renderItem={({ item }) => (
+            <Card
+              CardData={item}
+              onPress={() => {
+                navigation.navigate('DetailsExtension', {
+                  extensionNumber: item.extension,
+                });
+              }}
+            />
+          )}
           refreshing={refreshing}
           onRefresh={() => {
             loadExtensions();

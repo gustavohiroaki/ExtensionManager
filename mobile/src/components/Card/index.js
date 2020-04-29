@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { TouchableWithoutFeedback } from 'react-native';
 
 import {
   Container,
@@ -10,15 +11,17 @@ import {
   Sector,
 } from './styles';
 
-export default function Card({ CardData }) {
+export default function Card({ CardData, onPress }) {
   return (
-    <Container>
-      <Position>{CardData.position}</Position>
-      <Extension>{CardData.extension}</Extension>
-      <Name>{CardData.name}</Name>
-      <Sector>{CardData.sector.toUpperCase()}</Sector>
-      <BottomBar color={CardData.color} />
-    </Container>
+    <TouchableWithoutFeedback onPress={onPress}>
+      <Container>
+        <Position>{CardData.position}</Position>
+        <Extension>{CardData.extension}</Extension>
+        <Name>{CardData.name}</Name>
+        <Sector>{CardData.sector.toUpperCase()}</Sector>
+        <BottomBar color={CardData.color} />
+      </Container>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -31,4 +34,5 @@ Card.propTypes = {
     sector: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired,
   }).isRequired,
+  onPress: PropTypes.func.isRequired,
 };

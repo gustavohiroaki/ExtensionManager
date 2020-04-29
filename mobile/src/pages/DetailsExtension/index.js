@@ -31,9 +31,9 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-export default function NewExtension({ navigation }) {
+export default function DetailsExtension({ route, navigation }) {
   const [sectors, setSectors] = useState([]);
-  const [extension, setExtension] = useState('');
+  const [extension, setExtension] = useState();
   const [name, setName] = useState('');
   const [position, setPosition] = useState('');
   const [sector, setSector] = useState('');
@@ -54,15 +54,29 @@ export default function NewExtension({ navigation }) {
     setSectors(tempArray);
   }
 
-  async function submitData() {
-    const submit = await api.post('/extension', {
-      extension,
+  async function loadExtension() {
+    const currentExtension = await api.get(
+      // eslint-disable-next-line react/prop-types
+      `/extension/${route.params.extensionNumber}`
+    );
+    const { data } = currentExtension;
+
+    setExtension(data.extension.toString());
+    setName(data.name);
+    setPosition(data.position);
+    setDescription(data.description);
+    setSector(data.sector_id);
+
+    console.tron.log(data.extension);
+  }
+
+  async function updateData() {
+    const submit = await api.put(`/extension/${route.params.extensionNumber}`, {
       name,
       sector,
       position,
       description,
     });
-
     if (submit.data.error) {
       showMessage({
         message: submit.data.error,
@@ -70,16 +84,34 @@ export default function NewExtension({ navigation }) {
       });
     } else {
       showMessage({
-        message: 'Dados inseridos com sucesso',
+        message: 'Dados atualizados com sucesso',
         type: 'success',
       });
-
-      navigation.goBack();
     }
+  }
+
+  async function deleteData() {
+    const submit = await api.delete(
+      `/extension/${route.params.extensionNumber}`
+    );
+    if (submit.data.error) {
+      showMessage({
+        message: submit.data.error,
+        type: 'warning',
+      });
+    } else {
+      showMessage({
+        message: 'Dados removidos com sucesso',
+        type: 'success',
+      });
+    }
+
+    navigation.goBack();
   }
 
   useEffect(() => {
     loadSectors();
+    loadExtension();
   }, []);
 
   return (
@@ -104,6 +136,8 @@ export default function NewExtension({ navigation }) {
               leftIconContainerStyle={{ marginRight: 10 }}
               leftIcon={<FontAwesome name="phone" />}
               placeholder="Ramal"
+              value={extension}
+              disabled
               onChangeText={(text) => {
                 setExtension(text);
               }}
@@ -113,6 +147,7 @@ export default function NewExtension({ navigation }) {
               leftIconContainerStyle={{ marginRight: 10 }}
               leftIcon={<FontAwesome name="user-o" />}
               placeholder="Name"
+              value={name}
               onChangeText={(text) => {
                 setName(text);
               }}
@@ -122,6 +157,7 @@ export default function NewExtension({ navigation }) {
               leftIconContainerStyle={{ marginRight: 10 }}
               leftIcon={<FontAwesome name="briefcase" />}
               placeholder="Cargo"
+              value={position}
               onChangeText={(text) => {
                 setPosition(text);
               }}
@@ -131,6 +167,7 @@ export default function NewExtension({ navigation }) {
               leftIconContainerStyle={{ marginRight: 10 }}
               leftIcon={<FontAwesome name="file-text-o" />}
               placeholder="Description"
+              value={description}
               onChangeText={(text) => {
                 setDescription(text);
               }}
@@ -139,14 +176,21 @@ export default function NewExtension({ navigation }) {
             <RNPickerSelect
               onValueChange={(value) => setSector(value)}
               placeholder={{ label: 'Setor', value: null }}
+              value={sector}
               style={{ ...pickerSelectStyles }}
               items={sectors}
             />
 
             <Button
               containerStyle={{ width: '100%' }}
-              title="Enviar"
-              onPress={submitData}
+              title="Atualizar"
+              onPress={updateData}
+            />
+            <Button
+              containerStyle={{ width: '100%' }}
+              title="Deletar"
+              buttonStyle={{ backgroundColor: 'red', marginTop: 15 }}
+              onPress={deleteData}
             />
           </FormContainer>
         </AppContainer>
