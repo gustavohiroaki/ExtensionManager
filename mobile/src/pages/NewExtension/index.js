@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { showMessage } from 'react-native-flash-message';
@@ -154,3 +155,9 @@ export default function NewExtension({ navigation }) {
     </Container>
   );
 }
+
+NewExtension.propTypes = {
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+  }).isRequired,
+};

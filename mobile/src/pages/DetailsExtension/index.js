@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { showMessage } from 'react-native-flash-message';
@@ -66,8 +67,6 @@ export default function DetailsExtension({ route, navigation }) {
     setPosition(data.position);
     setDescription(data.description);
     setSector(data.sector_id);
-
-    console.tron.log(data.extension);
   }
 
   async function updateData() {
@@ -198,3 +197,14 @@ export default function DetailsExtension({ route, navigation }) {
     </Container>
   );
 }
+
+DetailsExtension.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      extensionNumber: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+  }).isRequired,
+};

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import { TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
@@ -99,3 +100,10 @@ export default function Main({ navigation }) {
     </Container>
   );
 }
+
+Main.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+    addListener: PropTypes.func.isRequired,
+  }).isRequired,
+};
